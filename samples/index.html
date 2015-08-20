@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Untitled</title>
+		<style>
+			div {
+				margin: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 id="error">Hello</h1>
+		<form id="validation">
+			<input type="hidden" id="tags[0]" />
+			<input type="hidden" id="tags[1]" />
+			<input type="hidden" id="tags[2]" />
+			<div>
+				<input type="text" id="title" placeholder="Title" value="" />
+			</div>
+			<div>
+				<input type="text" id="location" placeholder="Location" value="" />
+			</div>
+			<div>
+				<input type="submit" value="Submit" />
+			</div>
+		</form>
+		<script src="../dist/valiform.min.js"></script>
+		<script>
+
+			var form = Valiform.form("validation");
+			form.onError(function() {
+				document.getElementById("error").textContent = "Form error";
+			});
+
+			form.onSuccess(function() {
+				document.getElementById("error").textContent = "Form OK";
+			});
+
+			form.input("title").rules({
+				required: true
+			}).watch();
+
+		</script>
+	</body>
+</html>
