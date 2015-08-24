@@ -25,6 +25,9 @@ class ValiformRule
     private rule: string;
     private value: any;
 
+    public errorMethod: (e: any) => void
+    public successMethod: () => void
+
     /**
      * constructor gives all properties of this class a default value, passed
      * through once instanciated.
@@ -40,6 +43,8 @@ class ValiformRule
         this.inputElement = inputElement;
         this.rule = rule;
         this.value = value;
+        this.errorMethod = function(e){};
+        this.successMethod = function(){};
     }
 
     /**
@@ -52,6 +57,12 @@ class ValiformRule
         switch (this.rule) {
             case "required":
                 return this.required(this.value);
+                break;
+            case "success":
+                return this.success(this.value);
+                break;
+            case "error":
+                return this.error(this.value);
                 break;
         }
         return false;
@@ -73,8 +84,20 @@ class ValiformRule
         return true;
     }
 
-    private type(is: string)
+    private success(action: () => void): boolean
     {
+        this.successMethod = action;
+        return true;
+    }
 
+    private error(action: (e: any) => void): boolean
+    {
+        this.errorMethod = action;
+        return true;
+    }
+
+    private isEmail(is: string)
+    {
+        
     }
 }
