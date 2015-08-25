@@ -16,11 +16,6 @@
 
 class ValiformWatcher
 {
-    constructor()
-    {
-
-    }
-
     watch(valiform: Valiform): ValiformWatcher
     {
         valiform.formInput.addEventListener("keyup", function(e: any) {
