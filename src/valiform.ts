@@ -135,7 +135,7 @@ class Valiform
      */
     private applyRules(): void
     {
-        var rule: any;
+        var rule: ValiformRule;
         var success: () => void = null;
         var error: (e: any) => void = null;
 

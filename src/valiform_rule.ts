@@ -22,8 +22,8 @@ class ValiformRule
      * @var any The value of the rule to be applied
      */
     private inputElement: any;
-    private rule: string;
-    private value: any;
+    public rule: string;
+    public value: any;
 
     /**
      * constructor gives all properties of this class a default value, passed
