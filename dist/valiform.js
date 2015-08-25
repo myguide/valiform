@@ -24,6 +24,9 @@ var ValiformRule = (function () {
             case "required":
                 return this.required(this.value);
                 break;
+            default:
+                return true;
+                break;
         }
         return false;
     };
@@ -33,7 +36,7 @@ var ValiformRule = (function () {
         }
         return true;
     };
-    ValiformRule.prototype.type = function (is) {
+    ValiformRule.prototype.isEmail = function (is) {
     };
     return ValiformRule;
 })();
@@ -58,8 +61,11 @@ var Valiform = (function () {
         this.formInput = null;
         this.status = true;
         this.errors = [];
+        this.errorCount = 0;
         this.options = null;
         this.onLoadValue = false;
+        this.onSuccessMethod = function () { };
+        this.onErrorMethod = function (e) { };
     }
     Valiform.prototype.form = function (name) {
         this.formElement = document.getElementById(name);
@@ -88,6 +94,10 @@ var Valiform = (function () {
             valiform.formInput = e.target;
             valiform.rules(valiform.options, true);
         });
+        this.formInput.addEventListener("blur", function (e) {
+            valiform.formInput = e.target;
+            valiform.rules(valiform.options, true);
+        });
         return this;
     };
     Valiform.prototype.onLoad = function (is) {
@@ -112,14 +122,35 @@ var Valiform = (function () {
         return true;
     };
     Valiform.prototype.applyRules = function () {
+        var rule;
+        var success = null;
+        var error = null;
         for (var key in this.options) {
-            var rule = new ValiformRule(this.formInput, key, this.options[key]);
-            if (rule.validate() !== true) {
-                this.onErrorMethod(this.errors);
-                return null;
+            rule = new ValiformRule(this.formInput, key, this.options[key]);
+            if (rule.rule === "success") {
+                success = rule.value;
             }
-            this.onSuccessMethod();
+            if (rule.rule === "error") {
+                error = rule.value;
+            }
+            if (rule.validate() !== true) {
+                this.errorCount++;
+            }
         }
+        if (this.errorCount > 0) {
+            if (error !== null) {
+                this.status == false;
+                error(this.errors);
+                this.errorCount = 0;
+            }
+            return null;
+        }
+        if (success !== null) {
+            this.status = true;
+            success();
+        }
+        this.errorCount = 0;
+        return null;
     };
     return Valiform;
 })();

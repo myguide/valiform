@@ -30,6 +30,7 @@ class Valiform
     private formInput: any;
     private status: boolean;
     private errors: string[];
+    private errorCount: number;
     private options: any;
     private onLoadValue: boolean;
     private onSuccessMethod: () => void
@@ -48,8 +49,11 @@ class Valiform
         this.formInput = null;
         this.status = true;
         this.errors = [];
+        this.errorCount = 0;
         this.options = null;
         this.onLoadValue = false;
+        this.onSuccessMethod = function(){};
+        this.onErrorMethod = function(e: any){};
     }
 
     /**
@@ -117,6 +121,11 @@ class Valiform
     {
         var valiform = this;
         this.formInput.addEventListener("keyup", function(e: any) {
+            valiform.formInput = e.target;
+            valiform.rules(valiform.options, true);
+        });
+
+        this.formInput.addEventListener("blur", function(e: any) {
             valiform.formInput = e.target;
             valiform.rules(valiform.options, true);
         });
@@ -204,14 +213,36 @@ class Valiform
      */
     private applyRules(): void
     {
+        var rule: any;
+        var success: () => void = null;
+        var error: (e: any) => void = null;
+
         for (var key in this.options) {
-            var rule = new ValiformRule(this.formInput, key, this.options[key]);
+            rule = new ValiformRule(this.formInput, key, this.options[key]);
+            if (rule.rule === "success") {success = rule.value;}
+            if (rule.rule === "error") {error = rule.value;}
+
             if (rule.validate() !== true) {
-                this.onErrorMethod(this.errors);
-                return null;
-            } 
-            this.onSuccessMethod();
+                this.errorCount++;
+            }
         }
+
+        if (this.errorCount > 0) {
+            if (error !== null) {
+                this.status == false;
+                error(this.errors);
+                this.errorCount = 0;
+            }
+            return null;
+        }
+
+        if (success !== null) {
+            this.status = true;
+            success();
+        }
+
+        this.errorCount = 0;
+        return null;
     }
 }
 
