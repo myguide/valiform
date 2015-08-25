@@ -1,0 +1,22 @@
+{
+  "name": "valiform",
+  "version": "0.0.1",
+  "homepage": "https://github.com/myguide/valiform",
+  "authors": [
+    "Harry Lawrence <hazbo@gmx.com>"
+  ],
+  "description": "Form validation made easy!",
+  "keywords": [
+    "validation",
+    "form",
+    "valiform"
+  ],
+  "main": "dist/valiform.min.js",
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
