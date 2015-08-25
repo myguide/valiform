@@ -13,6 +13,37 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+var ValiformWatcher = (function () {
+    function ValiformWatcher() {
+    }
+    ValiformWatcher.prototype.watch = function (valiform) {
+        valiform.formInput.addEventListener("keyup", function (e) {
+            valiform.formInput = e.target;
+            valiform.rules(valiform.options, true);
+        });
+        valiform.formInput.addEventListener("blur", function (e) {
+            valiform.formInput = e.target;
+            valiform.rules(valiform.options, true);
+        });
+        return this;
+    };
+    return ValiformWatcher;
+})();
+/**
+ * Valiform v0.0.1
+ *
+ * (c) myguide.io 2015
+ *
+ * @package Valiform
+ * @version 0.0.1
+ *
+ * @author Harry Lawrence <http://github.com/hazbo>
+ *
+ * License: MIT
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 var ValiformRule = (function () {
     function ValiformRule(inputElement, rule, value) {
         this.inputElement = inputElement;
@@ -83,15 +114,8 @@ var Valiform = (function () {
         return this;
     };
     Valiform.prototype.watch = function () {
-        var valiform = this;
-        this.formInput.addEventListener("keyup", function (e) {
-            valiform.formInput = e.target;
-            valiform.rules(valiform.options, true);
-        });
-        this.formInput.addEventListener("blur", function (e) {
-            valiform.formInput = e.target;
-            valiform.rules(valiform.options, true);
-        });
+        var watcher = new ValiformWatcher();
+        watcher.watch(this);
         return this;
     };
     Valiform.prototype.getStatus = function () {

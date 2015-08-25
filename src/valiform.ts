@@ -27,11 +27,11 @@ class Valiform
      * @var (e: string[]) => void Method to fire when form fails
      */
     private formElement: any;
-    private formInput: any;
+    public formInput: any;
     private status: boolean;
     private errors: string[];
     private errorCount: number;
-    private options: any;
+    public options: any;
 
     /**
      * constructor assigns default values to the relevant properties for the
@@ -109,16 +109,8 @@ class Valiform
      */
     public watch(): Valiform
     {
-        var valiform = this;
-        this.formInput.addEventListener("keyup", function(e: any) {
-            valiform.formInput = e.target;
-            valiform.rules(valiform.options, true);
-        });
-
-        this.formInput.addEventListener("blur", function(e: any) {
-            valiform.formInput = e.target;
-            valiform.rules(valiform.options, true);
-        });
+        var watcher: ValiformWatcher = new ValiformWatcher();
+        watcher.watch(this);
         return this;
     }
 

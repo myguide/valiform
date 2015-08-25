@@ -8,6 +8,7 @@
         "sourceMap": false
     },
     "files": [
+        "src/valiform_watcher.ts",
         "src/valiform_rule",
         "src/valiform.ts"
     ]
