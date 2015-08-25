@@ -32,9 +32,6 @@ class Valiform
     private errors: string[];
     private errorCount: number;
     private options: any;
-    private onLoadValue: boolean;
-    private onSuccessMethod: () => void
-    private onErrorMethod: (e: string[]) => void
 
     /**
      * constructor assigns default values to the relevant properties for the
@@ -51,9 +48,6 @@ class Valiform
         this.errors = [];
         this.errorCount = 0;
         this.options = null;
-        this.onLoadValue = false;
-        this.onSuccessMethod = function(){};
-        this.onErrorMethod = function(e: any){};
     }
 
     /**
@@ -89,8 +83,7 @@ class Valiform
     /**
      * rules gets the options passed to the public method and defaults to the
      * fact that it wasn't fired by a watch event. If a watch event fires, it
-     * event will == true. This way we can choose whether or not to fire rules
-     * onLoad.
+     * event will == true.
      *
      * @param any The options object to be passed through
      * @param boolean The watch event flag
@@ -100,11 +93,8 @@ class Valiform
     public rules(options: any, event = false): Valiform
     {
         this.options = options;
-        if (this.checkForEvent(event) !== true) {
-            return this;
-        }
 
-        if (this.formInput !== null) {
+        if (this.formInput !== null && event === true) {
             this.applyRules();
         }
         return this;
@@ -133,50 +123,6 @@ class Valiform
     }
 
     /**
-     * onLoad is a public method that allows the user to specify whether or not
-     * the validation rules are fired once the form has initially loaded without
-     * any user input. By default this is set to false. Something like this
-     * could come in handy on a form that is there to edit existing form fields
-     *
-     * @param boolean The boolean flag to specify whether to fire or not
-     *
-     * @return Valiform
-     */
-    public onLoad(is: boolean): Valiform
-    {
-        this.onLoadValue = is;
-        return this;
-    }
-
-    /**
-     * onSuccess allows the user to speficy a function with zero params to be
-     * called once the validation rules have all passed.
-     *
-     * @param () => void The callback function to be fired
-     *
-     * @return Valiform
-     */
-    public onSuccess(callback: () => void): Valiform
-    {
-        this.onSuccessMethod = callback;
-        return this;
-    }
-
-    /**
-     * onError allows the user to speficy a function with one param to be called
-     * if any validation rules have failed.
-     *
-     * @param (e :string[]) => void The callback function to be fired
-     *
-     * @return Valiform
-     */
-    public onError(callback: (e :string[]) => void): Valiform
-    {
-        this.onErrorMethod = callback;
-        return this;
-    }
-
-    /**
      * getStatus gets the current success status based on the fields Valiform is
      * is currently attached to.
      *
@@ -185,23 +131,6 @@ class Valiform
     public getStatus(): boolean
     {
         return this.status;
-    }
-
-    /**
-     * checkForEvent checks to see if the onLoadValue is false before deciding
-     * whether or not to allow the rules to be applied which Valiform is
-     * watching an element.
-     *
-     * @param boolean The event flag
-     *
-     * @return boolean
-     */
-    private checkForEvent(event: boolean): boolean
-    {
-        if (event === false && this.onLoadValue === false) {
-            return false;
-        }
-        return true;
     }
 
     /**

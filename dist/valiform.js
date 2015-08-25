@@ -63,9 +63,6 @@ var Valiform = (function () {
         this.errors = [];
         this.errorCount = 0;
         this.options = null;
-        this.onLoadValue = false;
-        this.onSuccessMethod = function () { };
-        this.onErrorMethod = function (e) { };
     }
     Valiform.prototype.form = function (name) {
         this.formElement = document.getElementById(name);
@@ -80,10 +77,7 @@ var Valiform = (function () {
     Valiform.prototype.rules = function (options, event) {
         if (event === void 0) { event = false; }
         this.options = options;
-        if (this.checkForEvent(event) !== true) {
-            return this;
-        }
-        if (this.formInput !== null) {
+        if (this.formInput !== null && event === true) {
             this.applyRules();
         }
         return this;
@@ -100,26 +94,8 @@ var Valiform = (function () {
         });
         return this;
     };
-    Valiform.prototype.onLoad = function (is) {
-        this.onLoadValue = is;
-        return this;
-    };
-    Valiform.prototype.onSuccess = function (callback) {
-        this.onSuccessMethod = callback;
-        return this;
-    };
-    Valiform.prototype.onError = function (callback) {
-        this.onErrorMethod = callback;
-        return this;
-    };
     Valiform.prototype.getStatus = function () {
         return this.status;
-    };
-    Valiform.prototype.checkForEvent = function (event) {
-        if (event === false && this.onLoadValue === false) {
-            return false;
-        }
-        return true;
     };
     Valiform.prototype.applyRules = function () {
         var rule;
