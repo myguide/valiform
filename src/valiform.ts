@@ -17,20 +17,21 @@
 class Valiform
 {
     /**
-     * @var any formElement The form with inputs to validate
-     * @var any formInput An input element to be validated
+     * @var any The form with inputs to validate
      * @var boolean The status of errors existing or not
      * @var string[] List of error messages
-     * @var any Options to be passed through as rules
-     * @var boolean Whether or not to fire validation on load
-     * @var () => void Method to fire on form success
-     * @var (e: string[]) => void Method to fire when form fails
+     * @var number The number of form errors generates
      */
     private formElement: any;
-    public formInput: any;
     private status: boolean;
     private errors: string[];
     private errorCount: number;
+
+    /**
+     * @var any An input element to be validated
+     * @var any Options to be passed through as rules
+     */
+    public formInput: any;
     public options: any;
 
     /**
